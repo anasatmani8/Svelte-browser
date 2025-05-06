@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <script>
-      // Send token info to your extension
-      const url = new URL(window.location);
-      chrome.runtime.sendMessage({
-        type: 'keycloak-callback',
-        data: url.href
-      }, () => {
-        window.close();
-      });
-    </script>
-  </head>
-  <body>L3TA WAS HERE</body>
+<head>
+  <title>Redirecting...</title>
+  <script>
+    window.onload = () => {
+      const params = new URLSearchParams(window.location.hash.slice(1));
+      const token = params.get('access_token');
+
+      if (token) {
+        chrome.runtime.sendMessage({ type: 'KEYCLOAK_TOKEN', token });
+      }
+
+      window.close();
+    };
+  </script>
+</head>
+<body>
+  <p>Redirecting, please wait...</p>
+</body>
 </html>
