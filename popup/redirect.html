@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      // Send token info to your extension
+      const url = new URL(window.location);
+      chrome.runtime.sendMessage({
+        type: 'keycloak-callback',
+        data: url.href
+      }, () => {
+        window.close();
+      });
+    </script>
+  </head>
+  <body>L3TA WAS HERE</body>
+</html>
