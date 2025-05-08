@@ -1,23 +1,17 @@
-const api = (typeof browser !== 'undefined' && browser.storage) ? browser
-          : (typeof chrome !== 'undefined' && chrome.storage) ? chrome
-          : {
-              storage: {
-                local: {
-                  get: (keys, cb) => cb({}), // mock get
-                  set: (items, cb) => cb(),  // mock set
-                }
-              }
-            };
-
-
+// Safe reference to the browser storage API
+const storage = 
+  typeof browser !== 'undefined' && browser.storage?.local
+    ? browser.storage.local
+    : typeof chrome !== 'undefined' && chrome.storage?.local
+      ? chrome.storage.local
+      : {
+          get: (keys, cb) => cb({}), // fallback mock
+          set: (items, cb) => cb(),
+        };
 
 export function getStorage(keys) {
   return new Promise((resolve, reject) => {
-    if (!api?.storage?.local) {
-      return reject(new Error("Storage API not available."));
-    }
-
-    api.storage.local.get(keys, (result) => {
+    storage.get(keys, (result) => {
       if (chrome.runtime?.lastError) {
         reject(chrome.runtime.lastError);
       } else {
@@ -27,10 +21,9 @@ export function getStorage(keys) {
   });
 }
 
-
 export function setStorage(items) {
   return new Promise((resolve, reject) => {
-    api.storage.local.set(items, () => {
+    storage.set(items, () => {
       if (chrome.runtime?.lastError) {
         reject(chrome.runtime.lastError);
       } else {

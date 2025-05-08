@@ -1,88 +1,27 @@
 <script>
+  import { auth, login, logout } from '../public/authStore.js';
   import { getStorage, setStorage } from '../storage.js';
-  import Keycloak from 'keycloak-js';
+  import { onMount } from 'svelte';
+  import { initAuth } from '../public/authStore.js';
 
   let count = 0;
   let animate = false;
+
   let isAuthenticated = false;
   let username = '';
-  let token = '';
 
-  const keycloak = new Keycloak({
-    url: 'http://localhost:8080',
-    realm: 'my-extension',
-    clientId: 'svelte-extension',
+  $: ({ isAuthenticated, username } = $auth);
+
+  onMount(async () => {
+    await initAuth();
+    const result = await getStorage(['count']);
+    count = result.count || 0;
   });
-
-  async function initAuth() {
-    console.log("Initializing Keycloak...");
-
-    try {
-      const authenticated = await keycloak.init({
-        pkceMethod: 'S256',
-        onLoad: 'check-sso',
-        checkLoginIframe: false,
-        redirectUri: 'https://serene-phoenix-3d7aa7.netlify.app/redirect.html'
-      });
-
-      console.log("Keycloak authenticated:", authenticated);
-
-      if (authenticated) {
-        isAuthenticated = true;
-        username = keycloak.tokenParsed?.preferred_username || '';
-        token = keycloak.token;
-        chrome.storage.local.set({ token });
-
-        console.log("User authenticated:", username);
-
-        const result = await getStorage(['count']);
-        if (result.count !== undefined) {
-          count = result.count;
-        }
-      } else {
-        console.log("User not authenticated.");
-      }
-    } catch (error) {
-      console.error("Keycloak init error:", error);
-    }
-  }
-
-  async function login() {
-  try {
-    const loginUrl = await keycloak.createLoginUrl({
-      redirectUri: 'https://serene-phoenix-3d7aa7.netlify.app/redirect.html',
-      prompt: 'login',
-    });
-
-    chrome.tabs.create({ url: loginUrl });
-  } catch (error) {
-    console.error("Login failed:", error);
-  }
-}
-
-
-
-  async function logout() {
-    try {
-      await keycloak.logout();
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
-  }
-
-  initAuth();
-
-  function triggerAnimation() {
-    animate = false;
-    requestAnimationFrame(() => {
-      animate = true;
-    });
-  }
 
   function increment() {
     if (isAuthenticated) {
       count++;
-      setStorage({ count }).catch(console.error);
+      setStorage({ count });
       triggerAnimation();
     }
   }
@@ -90,7 +29,7 @@
   function decrement() {
     if (isAuthenticated) {
       count--;
-      setStorage({ count }).catch(console.error);
+      setStorage({ count });
       triggerAnimation();
     }
   }
@@ -98,34 +37,18 @@
   function reset() {
     if (isAuthenticated) {
       count = 0;
-      setStorage({ count }).catch(console.error);
+      setStorage({ count });
       triggerAnimation();
     }
   }
 
-  // Listen to messages from redirect.html
-  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.type === 'KEYCLOAK_TOKEN') {
-      token = message.token;
-      isAuthenticated = true;
-      chrome.storage.local.set({ token });
-      console.log('Token received from redirect page');
-    }
-  });
-
-  if (import.meta.env.MODE === 'development') {
-    const socket = new WebSocket('ws://localhost:5173');
-    socket.addEventListener('message', (event) => {
-      if (event.data === 'reload-extension') {
-        chrome.runtime?.sendMessage('reload-extension');
-      }
+  function triggerAnimation() {
+    animate = false;
+    requestAnimationFrame(() => {
+      animate = true;
     });
   }
 </script>
-
-<style>
-  /* unchanged CSS */
-</style>
 
 <div class="container">
   <div class="title">Counter Extension</div>
