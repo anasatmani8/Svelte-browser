@@ -19,34 +19,38 @@ export async function initAuth() {
   try {
     const authenticated = await keycloak.init({
       pkceMethod: 'S256',
-      onLoad: 'check-sso',
-      checkLoginIframe: false,
-      redirectUri: 'https://serene-phoenix-3d7aa7.netlify.app/redirect.html'
+      onLoad: 'login-required',
+      checkLoginIframe: false
     });
 
     if (authenticated) {
+      console.log("✅ Already authenticated");
       auth.set({
         isAuthenticated: true,
         username: keycloak.tokenParsed?.preferred_username || '',
         token: keycloak.token,
       });
 
-      chrome.storage.local.set({ token: keycloak.token });
+      // Store token in chrome storage with error handling
+      chrome.storage.local.set({ token: keycloak.token }, () => {
+        if (chrome.runtime.lastError) {
+          console.error("Failed to set token in storage:", chrome.runtime.lastError);
+        } else {
+          console.log("Token stored successfully in chrome storage.");
+        }
+      });
     }
   } catch (error) {
-    console.error('Auth init failed', error);
+    console.error('Auth init failed', error?.message || error);
   }
 }
 
 export async function login() {
   console.log('login function');
   try {
-    const loginUrl = await keycloak.createLoginUrl({
-      redirectUri: 'https://serene-phoenix-3d7aa7.netlify.app/redirect.html',
-      prompt: 'login',
+    await keycloak.login({
+      prompt: 'login' // open login popup (no redirect)
     });
-
-    chrome.tabs.create({ url: loginUrl });
   } catch (error) {
     console.error('Login failed:', error);
   }
@@ -56,6 +60,15 @@ export async function logout() {
   try {
     await keycloak.logout();
     auth.set({ isAuthenticated: false, username: '', token: '' });
+
+    // Clear the token from chrome storage on logout
+    chrome.storage.local.remove('token', () => {
+      if (chrome.runtime.lastError) {
+        console.error("Failed to remove token from storage:", chrome.runtime.lastError);
+      } else {
+        console.log("Token removed from chrome storage.");
+      }
+    });
   } catch (error) {
     console.error('Logout failed:', error);
   }

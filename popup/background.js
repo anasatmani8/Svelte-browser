@@ -1,4 +1,8 @@
-
+// background.js
+chrome.runtime.onInstalled.addListener(() => {
+  console.log('Extension installed.');
+});
+  
 chrome.runtime.onInstalled.addListener(() => {
   console.log("Svelte Hello World Extension Installed");
 
