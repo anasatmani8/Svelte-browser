@@ -11,11 +11,11 @@ export async function initKeycloak() {
     const authenticated = await keycloak.init({
       pkceMethod: 'S256',
       checkLoginIframe: false,
-      onLoad: 'check-sso', // not login-required
+      onLoad: 'check-sso', 
     });
 
     if (!authenticated) {
-      // Try login with popup (no redirect)
+      
       await keycloak.login({ prompt: 'login' });
     }
 

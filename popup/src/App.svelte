@@ -15,7 +15,7 @@
     }
   });
 </script>
-
+ 
 <div class="container">
   <div class="title">Svelte Extension</div>
 

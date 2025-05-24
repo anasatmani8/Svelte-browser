@@ -4,12 +4,14 @@
   "version": "1.0",
   "description": "A simple extension using Svelte",
   "action": {
-    "default_popup": "popup/dist/index.html",
-    "default_title": "Hello World!"
+      "default_title": "Open Extension",
+    "default_popup": "popup/dist/index.html"
   },
   "permissions": [
-    "storage"
+    "storage",
+    "identity"
   ],
+  "optional_host_permissions":["https://*/*",    "http://*/*"  ],
   "background": {
     "service_worker": "background.js",
     "type": "module"
@@ -18,8 +20,9 @@
     "http://localhost:8080/*" 
   ],
   "content_security_policy": {
-    "extension_pages": "script-src 'self' http://localhost:8080; object-src 'self';" 
-  },
+  "extension_pages": "script-src 'self'  http://localhost:8080; object-src 'self';"
+}
+,
   "browser_specific_settings": {
     "gecko": {
       "id": "svelte-simple-extension@example.com",
