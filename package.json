@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@stripe/stripe-js": "^7.3.1",
     "keycloak-js": "^26.2.0"
   }
 }

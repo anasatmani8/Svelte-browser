@@ -9,13 +9,13 @@
 
   onMount(async () => {
     await initAuth();
-
-    if (isAuthenticated) {
-      alert(`👋 Hello ${username}`);
-    }
   });
+
+  $: if (isAuthenticated && username) {
+    alert(`👋 Hello ${username}`);
+  }
 </script>
- 
+
 <div class="container">
   <div class="title">Svelte Extension</div>
 

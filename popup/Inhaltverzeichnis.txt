@@ -1,0 +1,54 @@
+Table of Contents
+Introduction
+ 1.1 Background and Motivation
+ 1.2 Problem Statement
+ 1.3 Objectives of the Thesis
+ 1.4 Methodology
+ 1.5 Structure of the Thesis
+
+Fundamentals and Technologies
+ 2.1 Web Browser Extensions: Concepts and Architecture
+ 2.2 Cross-Browser Compatibility: Standards and Constraints
+ 2.3 The Svelte Framework: Reactive Frontend Development
+ 2.4 Keycloak and Identity Management: Authentication via OAuth2/OIDC
+ 2.5 Stripe for Web Payments: Integration and Security
+
+Requirements Analysis
+ 3.1 Functional Requirements
+ 3.2 Non-Functional Requirements
+ 3.3 Stakeholders and Use Cases
+ 3.4 Target Platforms and Technical Limitations
+
+System Design
+ 4.1 Overall Architecture of the Extension
+ 4.2 Module Design and Component Structure
+ 4.3 Integration Strategy for Keycloak
+ 4.4 Integration Strategy for Stripe
+ 4.5 UI/UX Design with Svelte
+
+Implementation
+ 5.1 Development Environment and Tools
+ 5.2 Building the Svelte-Based Extension
+ 5.3 Authentication Implementation using Keycloak
+ 5.4 Payment Flow Implementation with Stripe
+ 5.5 Cross-Browser Support: Chrome, Edge, and Safari
+ 5.6 Security Considerations
+
+Testing and Evaluation
+ 6.1 Testing Approach and Tools
+ 6.2 Functional and Integration Testing
+ 6.3 Cross-Browser Compatibility Testing
+ 6.4 Performance Analysis
+ 6.5 Evaluation of User Experience
+
+Discussion
+ 7.1 Achieved Results
+ 7.2 Challenges Encountered and Solutions
+ 7.3 Limitations of the Solution
+
+Conclusion and Future Work
+ 8.1 Summary of Findings
+ 8.2 Critical Reflection
+ 8.3 Potential Improvements and Future Research
+
+References
