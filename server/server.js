@@ -15,11 +15,11 @@ app.post('/create-checkout-session', async (req, res) => {
   const { success_url, cancel_url } = req.body;
 
   if (!success_url || !cancel_url) {
-    console.warn('❌ Missing success_url or cancel_url');
+    console.warn(' Missing success_url or cancel_url');
     return res.status(400).json({ error: 'Missing URLs' });
   }
 
-  console.log('✅ Received success_url:', success_url);
+  console.log(' Received success_url:', success_url);
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -39,7 +39,7 @@ app.post('/create-checkout-session', async (req, res) => {
 
     res.json({ url: session.url });
   } catch (err) {
-    console.error('❌ Stripe session creation failed:', err.message);
+    console.error(' Stripe session creation failed:', err.message);
     res.status(500).json({ error: 'Stripe session creation failed' });
   }
 });

@@ -17,10 +17,11 @@
 
   async function checkout() {
     
-    const success_url = chrome.runtime.getURL('popup/success.html');
-    const cancel_url = chrome.runtime.getURL('popup/cancel.html');
+    const success_url = 'https://laizee.ai/';
+    const cancel_url = 'chrome-extension://cnaohkmeakmelnlilfehmmcefkdkihfc/popup/cancel.html';
 
     console.log('✅ success_url:', success_url); // Should start with chrome-extension://
+    
 
     try {
       const res = await fetch('http://localhost:4242/create-checkout-session', {
@@ -29,21 +30,21 @@
         body: JSON.stringify({ success_url, cancel_url })
       });
 
-      const text = await res.text(); // Get response as text
+      const text = await res.text(); 
       try {
-        const session = JSON.parse(text); // Try to parse as JSON
+        const session = JSON.parse(text); 
         if (!session.url || !session.url.startsWith('https://')) {
           alert("⚠️ Stripe returned an invalid session URL.");
         } else {
           window.open(session.url, '_blank');
         }
       } catch (err) {
-        console.error("❌ Failed to parse JSON:", text);
-        alert("❌ Server error: response was not valid JSON.");
+        console.error(" Failed to parse JSON:", text);
+        alert(" Server error: response was not valid JSON.");
       }
     } catch (err) {
-      console.error("❌ Network/server error:", err);
-      alert("❌ Could not start checkout. Is the backend running?");
+      console.error(" Network/server error:", err);
+      alert(" Could not start checkout. Is the backend running?");
     }
   }
 </script>
