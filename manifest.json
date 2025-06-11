@@ -19,9 +19,20 @@
   "host_permissions": [
     "http://localhost:8080/*" 
   ],
-  "content_security_policy": {
-  "extension_pages": "script-src 'self'  http://localhost:8080; object-src 'self';"
-}
+"content_security_policy": {
+  "extension_pages": "script-src 'self'; object-src 'self';"
+},
+"web_accessible_resources": [
+  {
+    "resources": [
+      "popup/success.html",
+      "popup/cancel.html", "popup/success.js"
+    ],
+    "matches": ["<all_urls>"]
+  }
+]
+
+
 ,
   "browser_specific_settings": {
     "gecko": {
@@ -29,4 +40,5 @@
       "strict_min_version": "109.0"
     }
   }
+
 }
