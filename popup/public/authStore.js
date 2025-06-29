@@ -4,6 +4,7 @@ export const auth = writable({
   isAuthenticated: false,
   username: '',
   token: '',
+  roles:[]
 });
 
 const redirectUri = (typeof chrome !== 'undefined' && chrome.identity && chrome.identity.getRedirectURL)
@@ -80,8 +81,10 @@ export async function login() {
 
         const payload = JSON.parse(atob(token.split('.')[1]));
         const username = payload?.preferred_username || 'unknown';
+        const roles = payload?.realm_access?.roles || [];
 
         console.log('👤 Logged in as:', username);
+        console.log('🔐 Roles:', roles);
 
         auth.set({ isAuthenticated: true, username, token });
 
@@ -135,8 +138,10 @@ export function initAuth() {
         try {
           const payload = JSON.parse(atob(token.split('.')[1]));
           const username = payload?.preferred_username || '';
-          auth.set({ isAuthenticated: true, username, token });
+          const roles = payload?.realm_access?.roles || [];
+          auth.set({ isAuthenticated: true, username, token, roles });
           console.log('Auth session restored for', username);
+          console.log(' Roles:', roles);
           resolve(true);
         } catch (err) {
           console.error('Invalid token in storage', err);

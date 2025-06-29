@@ -17,10 +17,11 @@
 
   async function checkout() {
     
-    const success_url = 'https://laizee.ai/';
+    const success_url = 'https://laizee.ai/'; //for testing
     const cancel_url = 'chrome-extension://cnaohkmeakmelnlilfehmmcefkdkihfc/popup/cancel.html';
 
-    console.log('✅ success_url:', success_url); // Should start with chrome-extension://
+    console.log('✅ success_url:', success_url); // Should start with chrome-extension:// but Stripe block the chrome 
+                                                 // extensions due to security that's why am using the Laizee project for the instant
     
 
     try {
@@ -34,7 +35,7 @@
       try {
         const session = JSON.parse(text); 
         if (!session.url || !session.url.startsWith('https://')) {
-          alert("⚠️ Stripe returned an invalid session URL.");
+          alert(" Stripe returned an invalid session URL.");
         } else {
           window.open(session.url, '_blank');
         }
@@ -52,7 +53,12 @@
 {#if isAuthenticated}
   <p class="auth-message">Welcome, {username} 👋</p>
   <button on:click={logout}>Logout</button>
+  {#if  $auth.roles.includes('active_subscription')}
   <button on:click={checkout}>Buy Test Product ($20)</button>
+  {:else}
+  <p>You are not authorized to view this section.</p>
+{/if}
+
 {:else}
   <p class="auth-message">Please log in to use the extension.</p>
   <button on:click={login}>Login</button>
