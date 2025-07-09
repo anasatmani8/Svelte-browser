@@ -52,3 +52,84 @@ Conclusion and Future Work
  8.3 Potential Improvements and Future Research
 
 References
+
+-----------
+\section*{Extension Architecture Overview}
+
+The browser extension is structured around three main components: \textbf{background scripts}, \textbf{content scripts}, and the \textbf{popup/UI}. Each of these plays a distinct role in the extension’s functionality and lifecycle.
+
+\subsection*{1. Background Script}
+\begin{itemize}
+    \item Runs independently in the background.
+    \item Manages authentication (e.g., OAuth2 via Keycloak), session storage, and cross-component communication.
+    \item Does not have direct access to the DOM.
+    \item Listens for browser events (e.g., tab updates, messages).
+\end{itemize}
+
+\textbf{Typical file:} \texttt{background.js}
+
+\subsection*{2. Content Script}
+\begin{itemize}
+    \item Injected into specific web pages.
+    \item Can read and manipulate the DOM of those pages.
+    \item Communicates with the background script for operations requiring privileges.
+    \item Is sandboxed and does not interfere with the page’s own JavaScript.
+\end{itemize}
+
+\textbf{Typical file:} \texttt{content.js}
+
+\subsection*{3. Popup / UI}
+\begin{itemize}
+    \item The graphical user interface shown when the extension icon is clicked.
+    \item Allows user interaction (e.g., logging in, triggering actions).
+    \item Operates independently from content and background scripts.
+    \item Can initiate communication with the background script.
+\end{itemize}
+
+\textbf{Typical files:} \texttt{popup.html}, \texttt{popup.js}, \texttt{popup.css}
+
+\subsection*{4. Component Communication}
+\begin{itemize}
+    \item \textbf{Popup \textrightarrow{} Background:} via \texttt{chrome.runtime.sendMessage()}
+    \item \textbf{Content \textrightarrow{} Background:} via \texttt{chrome.runtime.sendMessage()} or \texttt{chrome.tabs.sendMessage()}
+    \item \textbf{Popup \textrightarrow{} Content:} indirect communication through the background script
+\end{itemize}
+
+\subsection*{5. Manifest File}
+The \texttt{manifest.json} defines the extension’s structure and permissions:
+
+\begin{verbatim}
+{
+  "manifest_version": 3,
+  "name": "My Extension",
+  "version": "1.0",
+  "permissions": ["storage", "tabs"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
+\end{verbatim}
+
+\subsection*{6. Visual Overview}
+
+\begin{center}
+\begin{tikzpicture}[node distance=1.5cm, every node/.style={align=center}]
+  \node (popup) [rectangle, draw, rounded corners, fill=blue!10] {Popup UI\\(\texttt{popup.html})};
+  \node (background) [rectangle, draw, below=of popup, rounded corners, fill=gray!10] {Background Script\\(\texttt{background.js})};
+  \node (content) [rectangle, draw, left=of background, rounded corners, fill=green!10] {Content Script\\(\texttt{content.js})};
+  \node (api) [rectangle, draw, right=of background, rounded corners, fill=orange!10] {Browser APIs\\(Auth, Tabs, etc.)};
+
+  \draw[->] (popup) -- (background);
+  \draw[->] (content) -- (background);
+  \draw[->] (background) -- (api);
+\end{tikzpicture}
+\end{center}

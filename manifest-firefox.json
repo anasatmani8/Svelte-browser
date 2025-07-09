@@ -9,21 +9,27 @@
   },
   "permissions": [
     "storage",
-    "identity"
+    "identity",
+    "http://localhost:8080/*"
   ],
   "optional_permissions": [
-    "https://*/",
-    "http://*/"
+    "https://*/*",
+    "http://*/*"
   ],
   "background": {
     "scripts": ["background.js"],
     "persistent": false
   },
-  "content_security_policy": "script-src 'self' http://localhost:8080; object-src 'self';",
+  "web_accessible_resources": [
+    "popup/success.html",
+    "popup/cancel.html",
+    "popup/success.js"
+  ],
+  "content_security_policy": "script-src 'self'; object-src 'self';",
   "browser_specific_settings": {
     "gecko": {
       "id": "svelte-simple-extension@example.com",
-      "strict_min_version": "78.0"
+      "strict_min_version": "91.0"
     }
   }
 }

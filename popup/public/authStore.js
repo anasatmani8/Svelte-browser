@@ -86,7 +86,7 @@ export async function login() {
         console.log('👤 Logged in as:', username);
         console.log('🔐 Roles:', roles);
 
-        auth.set({ isAuthenticated: true, username, token });
+        auth.set({ isAuthenticated: true, username, token, roles });
 
         if (chrome?.storage?.local) {
           chrome.storage.local.set({ token }, () => {
@@ -111,7 +111,7 @@ export async function login() {
 }
 
 export function logout() {
-  auth.set({ isAuthenticated: false, username: '', token: '' });
+  auth.set({ isAuthenticated: false, username: '', token: '' , roles:[]});
   if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
     chrome.storage.local.remove('token', () => {
       if (chrome.runtime.lastError) {
