@@ -1,11 +1,20 @@
 {
+  "type": "module",
+  "scripts": {
+    "test": "jest"
+  },
   "dependencies": {
     "@stripe/stripe-js": "^7.3.1",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
-    "type":"module",
     "express": "^5.1.0",
-    "keycloak-js": "^26.2.0",
-    "stripe": "^18.2.1"
+    "express-rate-limit": "^8.0.1",
+    "keycloak-js": "^26.2.0"
+  },
+  "devDependencies": {
+    "jest": "^30.0.5",
+    "jest-mock": "^30.0.5",
+    "stripe": "^18.3.0",
+    "supertest": "^7.1.4"
   }
 }

@@ -18,7 +18,8 @@
   async function checkout() {
     
     const success_url = 'https://laizee.ai/'; //for testing
-    const cancel_url = 'chrome-extension://cnaohkmeakmelnlilfehmmcefkdkihfc/popup/cancel.html';
+    const cancel_url = 'chrome-extension://cnaohkmeakmelnlilfehmmcefkdkihfc/popup/cancel.html';//  in our case we use test card that are
+                                                                                               // always correct so there's no cancel page
 
     console.log('✅ success_url:', success_url); // Should start with chrome-extension:// but Stripe block the chrome 
                                                  // extensions due to security that's why am using the Laizee project for the instant
