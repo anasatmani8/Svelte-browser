@@ -1,5 +1,5 @@
 // background.js
-/*
+
 chrome.runtime.onInstalled.addListener(() => {
   console.log('Extension installed.');
 });
@@ -21,8 +21,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   });
   chrome.action.onClicked.addListener((tab) => {
     chrome.tabs.create({ url: "popup/dist/index.html" });
-  });*/
+  });
   // src/background.js
-export function createStripeUrl(sessionId) {
+/*export function createStripeUrl(sessionId) {
   return `https://checkout.stripe.com/pay/${sessionId}`;
 }
+*/
